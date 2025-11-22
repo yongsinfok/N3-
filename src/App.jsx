@@ -8,6 +8,20 @@ function App() {
     const [currentPoint, setCurrentPoint] = useState(null);
     const [filter, setFilter] = useState('');
 
+    // Prevent iOS bounce/overscroll
+    useEffect(() => {
+        const preventDefault = (e) => {
+            if (e.touches.length > 1) return;
+            e.preventDefault();
+        };
+
+        document.addEventListener('touchmove', preventDefault, { passive: false });
+
+        return () => {
+            document.removeEventListener('touchmove', preventDefault);
+        };
+    }, []);
+
     const filteredPoints = grammarPoints.filter(p =>
         p.title.toLowerCase().includes(filter.toLowerCase()) ||
         p.meaning.toLowerCase().includes(filter.toLowerCase())
@@ -30,11 +44,15 @@ function App() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', padding: '2rem 0' }}>
+        <div style={{
+            minHeight: '100vh',
+            paddingTop: 'max(2rem, calc(2rem + var(--safe-area-inset-top)))',
+            paddingBottom: 'max(2rem, calc(2rem + var(--safe-area-inset-bottom)))'
+        }}>
             <div className="container">
                 {!currentPoint ? (
                     <>
-                        <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
+                        <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
                             <div style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -48,19 +66,25 @@ function App() {
                             }}>
                                 <BookOpen size={32} color="white" />
                             </div>
-                            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', background: 'linear-gradient(to right, #fff, #cbd5e1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            <h1 style={{
+                                fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+                                marginBottom: '0.5rem',
+                                background: 'linear-gradient(to right, #fff, #cbd5e1)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
+                            }}>
                                 N3 Grammar Master
                             </h1>
-                            <p style={{ color: 'var(--text-secondary)' }}>
-                                Interactive video lessons for Japanese mastery
+                            <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                                日本語能力試験 N3 文法复习
                             </p>
                         </header>
 
-                        <div style={{ marginBottom: '2rem', position: 'relative' }}>
-                            <Search size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                        <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
+                            <Search size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', pointerEvents: 'none' }} />
                             <input
                                 type="text"
-                                placeholder="Search grammar..."
+                                placeholder="搜索文法..."
                                 value={filter}
                                 onChange={(e) => setFilter(e.target.value)}
                                 style={{
@@ -71,7 +95,8 @@ function App() {
                                     borderRadius: '1rem',
                                     color: 'white',
                                     fontSize: '1rem',
-                                    outline: 'none'
+                                    outline: 'none',
+                                    WebkitAppearance: 'none'
                                 }}
                             />
                         </div>

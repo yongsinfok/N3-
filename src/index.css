@@ -8,7 +8,19 @@
   --accent-hover: #ec4899;
   --card-bg: #1e293b;
   --border: #334155;
-  --font-main: 'Inter', system-ui, sans-serif;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* iOS Safe Area */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -17,22 +29,48 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+
+  /* iOS specific */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html {
+  height: -webkit-fill-available;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+/* iOS Smooth Scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Utilities */
@@ -47,6 +85,8 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  padding-left: max(1rem, var(--safe-area-inset-left));
+  padding-right: max(1rem, var(--safe-area-inset-right));
 }
 
 .btn {
@@ -59,6 +99,13 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn:hover {
@@ -72,6 +119,12 @@ body {
   padding: 1.5rem;
   border: 1px solid var(--border);
   transition: transform 0.2s ease, border-color 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.card:active {
+  transform: scale(0.98);
 }
 
 .card:hover {
@@ -79,7 +132,9 @@ body {
   transform: translateY(-2px);
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin: 0;
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -89,8 +144,49 @@ h1, h2, h3 {
   background: linear-gradient(to right, #fff, #cbd5e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .accent-text {
   color: var(--accent);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.75rem;
+    padding-left: max(0.75rem, var(--safe-area-inset-left));
+    padding-right: max(0.75rem, var(--safe-area-inset-right));
+  }
+
+  .btn {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding: max(0px)) {
+  body {
+    padding-top: var(--safe-area-inset-top);
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+}
+
+/* Prevent pull-to-refresh on iOS */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* Text Selection (allow for study content) */
+p,
+span,
+div[class*="summary"],
+div[class*="example"] {
+  -webkit-user-select: text;
+  user-select: text;
 }
