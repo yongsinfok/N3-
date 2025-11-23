@@ -8,19 +8,8 @@ function App() {
     const [currentPoint, setCurrentPoint] = useState(null);
     const [filter, setFilter] = useState('');
 
-    // Prevent iOS bounce/overscroll
-    useEffect(() => {
-        const preventDefault = (e) => {
-            if (e.touches.length > 1) return;
-            e.preventDefault();
-        };
+    // iOS bounce/overscroll is handled by CSS overscroll-behavior
 
-        document.addEventListener('touchmove', preventDefault, { passive: false });
-
-        return () => {
-            document.removeEventListener('touchmove', preventDefault);
-        };
-    }, []);
 
     const filteredPoints = grammarPoints.filter(p =>
         p.title.toLowerCase().includes(filter.toLowerCase()) ||
